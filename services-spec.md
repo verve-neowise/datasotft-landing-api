@@ -25,6 +25,9 @@ X-Client-Access: {client-access-key}
 
 **Responses**
 
+Common Response References: **`400-ad`** |  **`500-ie`** 
+
+
 Success `200`
 
 ```json
@@ -43,26 +46,6 @@ Success `200`
             "content": "Service Content"
         }    
     ]
-}
-```
-
-Access denied `400`
-
-When access key not provided
-
-```json
-{
-    "status": 400,
-    "message": "Access denied"
-}
-```
-
-Internal Error `500`
-
-```json
-{
-    "status": 500,
-    "message": "Internal Error"
 }
 ```
 
@@ -90,6 +73,8 @@ Upload multiple images "upload"
 
 Created `201`
 
+Common Response References: **`400-ad`** |  **`500-ie`** | **`403-ip`**
+
 ```json
 {
     "status" : 201,
@@ -107,50 +92,108 @@ Created `201`
 }
 ```
 
+---
 
-Access denied `400`
 
-When access key not provided
+`PUT` `/services/:id` - update exists service
+
+**Request**
+
+```js
+PUT {baseUrl}/services/126
+Content-Type: multipart/form-data; boundary=MyBoundary
+X-Client-Access: {client-access-key}
+Authorization: Bearer {token}
+
+{
+ "title": "Service Title",
+ "desc": "Service Description",
+ "content": "Service Content"
+}
+
+Upload multiple images "upload"
+```
+
+
+**Responses**
+
+Updated `200`
+
+Common Response References: **`400-ad`** |  **`500-ie`** | **`403-ip`**
 
 ```json
 {
-    "status": 400,
-    "message": "Access denied"
+    "status" : 201,
+    "message" : "Service updated",
+    "service": {
+        "id": 126,
+        "title": "Service Title",
+        "images": [
+            "https://datasoft.uz/files/service-image.png",
+            "https://datasoft.uz/files/service-image.png"
+        ],
+        "desc": "Service Description",
+        "content": "Service Content"
+    }    
 }
 ```
 
-Not Authorized `401`
+Not Found `404`
 
-When user access token not provided
-
-```json
-{
-    "status": 401,
-    "message": "Missing or incorrect access token"
-}
-```
-
-Bad Request `403`
-
-API rend error when body or images fields incorrect or expected
+Service by {id} not found
 
 ```json
 {
     "status": 403,
-    "message": "Invalid parameters",
-    "errors" : [
-        "image files not provided",
-        "title must be not empty",
-        "content not provided"
-    ]
+    "message": "Service by id = 1 not found",
 }
 ```
 
-Internal Error `500`
+---
+
+
+
+`DELETE` `/services/:id` - delete exists service
+
+**Request**
+
+```js
+DELETE {baseUrl}/services/126
+X-Client-Access: {client-access-key}
+Authorization: Bearer {token}
+```
+
+
+**Responses**
+
+Common Response References: **`400-ad`** |  **`500-ie`**
+
+Deleted `200`
 
 ```json
 {
-    "status": 500,
-    "message": "Internal Error"
+    "status" : 201,
+    "message" : "Service deleted",
+    "service": {
+        "id": 126,
+        "title": "Service Title",
+        "images": [
+            "https://datasoft.uz/files/service-image.png",
+            "https://datasoft.uz/files/service-image.png"
+        ],
+        "desc": "Service Description",
+        "content": "Service Content"
+    }    
+}
+```
+
+Not Found `404`
+
+Service by {id} not found
+
+```json
+{
+    "status": 403,
+    "message": "Service by id = 1 not found",
 }
 ```
